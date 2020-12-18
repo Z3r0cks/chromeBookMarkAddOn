@@ -1,0 +1,79 @@
+html {
+  background-color: #ffffffff;
+}
+
+#wrapper {
+  color: #ffffffff;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  -webkit-transform: translate(-50%, -50%);
+          transform: translate(-50%, -50%);
+  font-size: 25px;
+}
+
+.catWrapper {
+  margin: 50px;
+  background-color: #213044;
+  height: -webkit-fit-content;
+  height: -moz-fit-content;
+  height: fit-content;
+}
+
+.innerWrapper {
+  border: solid #000000 1px;
+  border-radius: 20px;
+  padding: 50px;
+}
+
+.title {
+  width: 100%;
+  padding: 5px;
+}
+
+.title::-webkit-input-placeholder {
+  color: #000000;
+}
+
+.title:-ms-input-placeholder {
+  color: #000000;
+}
+
+.title::-ms-input-placeholder {
+  color: #000000;
+}
+
+.title::placeholder {
+  color: #000000;
+}
+
+.svg {
+  width: 50px;
+}
+
+.innerSvg {
+  width: 25px;
+}
+
+.urlWrapper {
+  margin: 5px 0;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+}
+
+.newUrl {
+  color: inherit;
+}
+
+.urlTitle {
+  margin-bottom: 5px;
+}
+/*# sourceMappingURL=style.css.map */
