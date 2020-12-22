@@ -4,6 +4,7 @@ $colorBlack: #000000;
 $colorCatBGC: #11adb8;
 $colorBGC: #213044;
 $colorBGCBtn: #74dfd9;
+$colorTitle: #ebae08;
 
 html {
    background-color: $colorBGC;
@@ -33,6 +34,7 @@ html {
 }
 
 .innerWrapper {
+   text-align: center;
    border: none;
    border-radius: 0 0 20px 20px;
    padding: 50px;
@@ -45,7 +47,7 @@ html {
 }
 
 .title {
-   background-color: $colorCatBGC;
+   background-color: $colorTitle;
    border-radius: 20px 20px 0 0;
    border: none;
    padding: 5px;
@@ -66,19 +68,16 @@ html {
 
 /////////////////////   URL.ts
 
-.urlBtn,
-.deleteBtn {
-   border-radius: 20px;
-   border: none;
-   background-color: $colorBGCBtn;
-   color: $colorWhite;
-   padding: 7px;
-   margin-bottom: 7px;
+.deleteBtn,
+.acceptBtn,
+.editBtn {
+   width: 25px;
 }
 
 .urlWrapper {
    display: flex;
    flex-direction: column;
+   margin-bottom: 1rem;
 }
 
 .urlTitle,
@@ -87,10 +86,10 @@ html {
    background-color: $colorCatBGC;
    padding: 7px;
    border-radius: 20px;
-   color:$colorWhite;
+   color: $colorWhite;
 
    &::placeholder {
-      color:$colorWhite;
+      color: $colorWhite;
    }
 }
 
@@ -100,9 +99,58 @@ html {
 
 .newUrl {
    color: inherit;
-   margin-bottom: .5rem;
+   margin-bottom: 0.5rem;
 }
 
 .urlTitle {
    margin-bottom: 5px;
+}
+
+/////////////////////   Overlays
+
+.overlayWrapper {
+   position: absolute;
+   display: flex;
+   flex-direction: column;
+   opacity: 0.9;
+   padding: 150px;
+   left: 50%;
+   top: 50%;
+   transform: translate(-50%, -50%);
+   border-radius: 20px;
+   background-color: $colorTitle;
+   animation: overlayOpacity 0.3s;
+   animation-fill-mode: forwards;
+}
+
+.closeBtn {
+   position: absolute;
+   top: -8px;
+   right: -8px;
+   width: 54px;
+}
+
+/////////////////////   Utilities
+
+.display-flex {
+   display: flex !important;
+}
+
+.justify-c-sb {
+   justify-content: space-between;
+}
+
+.flex-d-row {
+   flex-direction: row;
+}
+
+/////////////////////   Animations
+
+@keyframes overlayOpacity {
+   from {
+      top: 0%;
+   }
+   to {
+      top: 50%;
+   }
 }

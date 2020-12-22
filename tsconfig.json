@@ -1,8 +1,9 @@
 {
   "compilerOptions": {
-    "target": "es5",
+    "target": "es6",
     "module": "system",
     // "sourceMap": true,
-    "outFile": "./dist/js/content.js"
+    "outFile": "./dist/js/content.js",
+    "typeRoots": [ "node_modules/@types" ]
   }
 }

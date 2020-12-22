@@ -4,7 +4,7 @@ namespace BookmarkExtension {
       titleWrapper: HTMLElement;
       title: HTMLInputElement;
       innerWrapper: HTMLElement;
-      innerSVG;
+      innerSVG: SVGSVGElement;
 
       constructor() {
          this.catWrapper = document.createElement("div");
@@ -16,10 +16,11 @@ namespace BookmarkExtension {
          this.catWrapper.className = "catWrapper";
          this.innerWrapper.className = "innerWrapper";
          this.titleWrapper.className = "titleWrapper";
-         this.innerSVG = new SVG("innerSvg", "#213044").svg;
+         this.innerSVG = new AddSVG("innerSvg", "#213044").svg;
       }
 
       addNewCategory() {
+         console.log("test2");
          document.getElementById("wrapper").appendChild(this.catWrapper);
          this.catWrapper.appendChild(this.titleWrapper);
          this.titleWrapper.appendChild(this.title);
@@ -36,6 +37,7 @@ namespace BookmarkExtension {
             if (e.key == "Enter") {
                title.placeholder = title.value;
                title.value = "";
+               title.blur();
             }
          })
       }

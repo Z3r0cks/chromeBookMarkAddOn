@@ -29,6 +29,7 @@ html {
 }
 
 .innerWrapper {
+  text-align: center;
   border: none;
   border-radius: 0 0 20px 20px;
   padding: 50px;
@@ -47,7 +48,7 @@ html {
 }
 
 .title {
-  background-color: #11adb8;
+  background-color: #ebae08;
   border-radius: 20px 20px 0 0;
   border: none;
   padding: 5px;
@@ -81,14 +82,10 @@ html {
   width: 25px;
 }
 
-.urlBtn,
-.deleteBtn {
-  border-radius: 20px;
-  border: none;
-  background-color: #74dfd9;
-  color: #ffffffff;
-  padding: 7px;
-  margin-bottom: 7px;
+.deleteBtn,
+.acceptBtn,
+.editBtn {
+  width: 25px;
 }
 
 .urlWrapper {
@@ -99,6 +96,7 @@ html {
   -webkit-box-direction: normal;
       -ms-flex-direction: column;
           flex-direction: column;
+  margin-bottom: 1rem;
 }
 
 .urlTitle,
@@ -136,10 +134,77 @@ html {
 
 .newUrl {
   color: inherit;
-  margin-bottom: .5rem;
+  margin-bottom: 0.5rem;
 }
 
 .urlTitle {
   margin-bottom: 5px;
+}
+
+.overlayWrapper {
+  position: absolute;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  opacity: 0.9;
+  padding: 150px;
+  left: 50%;
+  top: 50%;
+  -webkit-transform: translate(-50%, -50%);
+          transform: translate(-50%, -50%);
+  border-radius: 20px;
+  background-color: #ebae08;
+  -webkit-animation: overlayOpacity 0.3s;
+          animation: overlayOpacity 0.3s;
+  -webkit-animation-fill-mode: forwards;
+          animation-fill-mode: forwards;
+}
+
+.closeBtn {
+  position: absolute;
+  top: -8px;
+  right: -8px;
+  width: 54px;
+}
+
+.display-flex {
+  display: -webkit-box !important;
+  display: -ms-flexbox !important;
+  display: flex !important;
+}
+
+.justify-c-sb {
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+}
+
+.flex-d-row {
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: row;
+          flex-direction: row;
+}
+
+@-webkit-keyframes overlayOpacity {
+  from {
+    top: 0%;
+  }
+  to {
+    top: 50%;
+  }
+}
+
+@keyframes overlayOpacity {
+  from {
+    top: 0%;
+  }
+  to {
+    top: 50%;
+  }
 }
 /*# sourceMappingURL=style.css.map */
