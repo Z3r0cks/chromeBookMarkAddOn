@@ -1,17 +1,24 @@
 $colorMain: #126;
 $colorWhite: #ffffffff;
 $colorBlack: #000000;
+$colorCatBGC: #11adb8;
 $colorBGC: #213044;
-
+$colorBGCBtn: #74dfd9;
 
 html {
-   background-color: $colorWhite;
+   background-color: $colorBGC;
 }
 
+.svg {
+   width: 50px;
+}
+
+/////////////////////   category.ts
+
 #wrapper {
-   color: $colorWhite;
    display: flex;
    position: absolute;
+   color: $colorWhite;
    top: 50%;
    left: 50%;
    transform: translate(-50%, -50%);
@@ -19,42 +26,81 @@ html {
 }
 
 .catWrapper {
+   border-radius: 20px;
    margin: 50px;
-   background-color: $colorBGC;
+   background-color: $colorCatBGC;
    height: fit-content;
 }
 
 .innerWrapper {
-   border: solid $colorBlack 1px;
-   border-radius: 20px;
+   border: none;
+   border-radius: 0 0 20px 20px;
    padding: 50px;
 }
 
-.title {
-   width: 100%;
-   padding: 5px;
-
-   &::placeholder {
-      color: $colorBlack;
-   }
+.titleWrapper {
+   display: flex;
+   justify-content: center;
+   align-items: center;
 }
 
-.svg {
-   width: 50px;
+.title {
+   background-color: $colorCatBGC;
+   border-radius: 20px 20px 0 0;
+   border: none;
+   padding: 5px;
+   text-align: center;
+   padding: 20px;
+   color: $colorWhite;
+   font-size: 20px;
+
+   &::placeholder {
+      color: $colorWhite;
+      font-size: 20px;
+   }
 }
 
 .innerSvg {
    width: 25px;
 }
 
+/////////////////////   URL.ts
+
+.urlBtn,
+.deleteBtn {
+   border-radius: 20px;
+   border: none;
+   background-color: $colorBGCBtn;
+   color: $colorWhite;
+   padding: 7px;
+   margin-bottom: 7px;
+}
+
 .urlWrapper {
-   margin: 5px 0;
    display: flex;
    flex-direction: column;
 }
 
+.urlTitle,
+.url {
+   border: solid 1px #74dfd9;
+   background-color: $colorCatBGC;
+   padding: 7px;
+   border-radius: 20px;
+   color:$colorWhite;
+
+   &::placeholder {
+      color:$colorWhite;
+   }
+}
+
+.url {
+   margin-bottom: 5px;
+}
+
 .newUrl {
    color: inherit;
+   margin-bottom: .5rem;
 }
 
 .urlTitle {

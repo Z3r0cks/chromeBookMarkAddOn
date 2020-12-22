@@ -1,13 +1,17 @@
 html {
-  background-color: #ffffffff;
+  background-color: #213044;
+}
+
+.svg {
+  width: 50px;
 }
 
 #wrapper {
-  color: #ffffffff;
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
   position: absolute;
+  color: #ffffffff;
   top: 50%;
   left: 50%;
   -webkit-transform: translate(-50%, -50%);
@@ -16,50 +20,78 @@ html {
 }
 
 .catWrapper {
+  border-radius: 20px;
   margin: 50px;
-  background-color: #213044;
+  background-color: #11adb8;
   height: -webkit-fit-content;
   height: -moz-fit-content;
   height: fit-content;
 }
 
 .innerWrapper {
-  border: solid #000000 1px;
-  border-radius: 20px;
+  border: none;
+  border-radius: 0 0 20px 20px;
   padding: 50px;
 }
 
+.titleWrapper {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+
 .title {
-  width: 100%;
+  background-color: #11adb8;
+  border-radius: 20px 20px 0 0;
+  border: none;
   padding: 5px;
+  text-align: center;
+  padding: 20px;
+  color: #ffffffff;
+  font-size: 20px;
 }
 
 .title::-webkit-input-placeholder {
-  color: #000000;
+  color: #ffffffff;
+  font-size: 20px;
 }
 
 .title:-ms-input-placeholder {
-  color: #000000;
+  color: #ffffffff;
+  font-size: 20px;
 }
 
 .title::-ms-input-placeholder {
-  color: #000000;
+  color: #ffffffff;
+  font-size: 20px;
 }
 
 .title::placeholder {
-  color: #000000;
-}
-
-.svg {
-  width: 50px;
+  color: #ffffffff;
+  font-size: 20px;
 }
 
 .innerSvg {
   width: 25px;
 }
 
+.urlBtn,
+.deleteBtn {
+  border-radius: 20px;
+  border: none;
+  background-color: #74dfd9;
+  color: #ffffffff;
+  padding: 7px;
+  margin-bottom: 7px;
+}
+
 .urlWrapper {
-  margin: 5px 0;
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -69,8 +101,42 @@ html {
           flex-direction: column;
 }
 
+.urlTitle,
+.url {
+  border: solid 1px #74dfd9;
+  background-color: #11adb8;
+  padding: 7px;
+  border-radius: 20px;
+  color: #ffffffff;
+}
+
+.urlTitle::-webkit-input-placeholder,
+.url::-webkit-input-placeholder {
+  color: #ffffffff;
+}
+
+.urlTitle:-ms-input-placeholder,
+.url:-ms-input-placeholder {
+  color: #ffffffff;
+}
+
+.urlTitle::-ms-input-placeholder,
+.url::-ms-input-placeholder {
+  color: #ffffffff;
+}
+
+.urlTitle::placeholder,
+.url::placeholder {
+  color: #ffffffff;
+}
+
+.url {
+  margin-bottom: 5px;
+}
+
 .newUrl {
   color: inherit;
+  margin-bottom: .5rem;
 }
 
 .urlTitle {

@@ -1,14 +1,17 @@
 /// <reference path="./Category.ts" />
+/// <reference path="./svg.ts" />
 
-namespace Bookmarker {
-   const wrapper: HTMLElement = document.getElementById("wrapper");
-   const svg = document.createElement("img");
-   svg.src = './svg/plus-circle-solid.svg';
-   svg.className = "svg";
+namespace BookmarkExtension {
+
+
+   const svg = new SVG("svg", "#74dfd9").svg
+   const wrapper: HTMLElement = document.createElement("div");
+   wrapper.className = "wrapper";
+   document.body.appendChild(wrapper);
 
    wrapper.appendChild(svg);
    svg.addEventListener('click', () => {
-      const test: Categorie = new Categorie();
+      const test: Category = new Category();
       test.addNewCategory();
    })
 }
