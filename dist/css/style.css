@@ -6,12 +6,23 @@ html {
   width: 50px;
 }
 
+.addNewCategory {
+  color: #fff;
+  border-radius: 15px;
+  background-color: #aaa;
+  position: absolute;
+  bottom: 20px;
+  right: 20px;
+  padding: 20px;
+  border: none;
+}
+
 #wrapper {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
   position: absolute;
-  color: #ffffffff;
+  color: #fff;
   top: 50%;
   left: 50%;
   -webkit-transform: translate(-50%, -50%);
@@ -48,33 +59,34 @@ html {
 }
 
 .title {
-  background-color: #ebae08;
+  background-color: #98dee7;
   border-radius: 20px 20px 0 0;
   border: none;
   padding: 5px;
   text-align: center;
   padding: 20px;
-  color: #ffffffff;
+  color: #fff;
   font-size: 20px;
+  width: 100%;
 }
 
 .title::-webkit-input-placeholder {
-  color: #ffffffff;
+  color: #fff;
   font-size: 20px;
 }
 
 .title:-ms-input-placeholder {
-  color: #ffffffff;
+  color: #fff;
   font-size: 20px;
 }
 
 .title::-ms-input-placeholder {
-  color: #ffffffff;
+  color: #fff;
   font-size: 20px;
 }
 
 .title::placeholder {
-  color: #ffffffff;
+  color: #fff;
   font-size: 20px;
 }
 
@@ -105,27 +117,27 @@ html {
   background-color: #11adb8;
   padding: 7px;
   border-radius: 20px;
-  color: #ffffffff;
+  color: #fff;
 }
 
 .urlTitle::-webkit-input-placeholder,
 .url::-webkit-input-placeholder {
-  color: #ffffffff;
+  color: #fff;
 }
 
 .urlTitle:-ms-input-placeholder,
 .url:-ms-input-placeholder {
-  color: #ffffffff;
+  color: #fff;
 }
 
 .urlTitle::-ms-input-placeholder,
 .url::-ms-input-placeholder {
-  color: #ffffffff;
+  color: #fff;
 }
 
 .urlTitle::placeholder,
 .url::placeholder {
-  color: #ffffffff;
+  color: #fff;
 }
 
 .url {
@@ -150,25 +162,40 @@ html {
   -webkit-box-direction: normal;
       -ms-flex-direction: column;
           flex-direction: column;
-  opacity: 0.9;
-  padding: 150px;
+  opacity: 0.95;
+  padding: 25px;
   left: 50%;
   top: 50%;
   -webkit-transform: translate(-50%, -50%);
           transform: translate(-50%, -50%);
   border-radius: 20px;
-  background-color: #ebae08;
+  background-color: #2f0101;
   -webkit-animation: overlayOpacity 0.3s;
           animation: overlayOpacity 0.3s;
   -webkit-animation-fill-mode: forwards;
           animation-fill-mode: forwards;
+  border: 5px solid white;
 }
 
 .closeBtn {
   position: absolute;
-  top: -8px;
-  right: -8px;
   width: 54px;
+  top: -13px;
+  right: -11px;
+}
+
+.overlayDesc {
+  padding: 0;
+  margin: 0;
+  color: #fff;
+}
+
+.overlayInput {
+  margin-bottom: 15px;
+  margin-top: 12px;
+  padding: 15px;
+  border: none;
+  border-radius: 15px;
 }
 
 .display-flex {

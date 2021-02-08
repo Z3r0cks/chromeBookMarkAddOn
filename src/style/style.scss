@@ -1,10 +1,12 @@
 $colorMain: #126;
-$colorWhite: #ffffffff;
-$colorBlack: #000000;
+$colorWhite: #fff;
+$colorGrey: #aaa;
+$colorBlack: #000;
 $colorCatBGC: #11adb8;
 $colorBGC: #213044;
 $colorBGCBtn: #74dfd9;
-$colorTitle: #ebae08;
+$colorTitle: #98dee7;
+$colorOverlay: #2f0101;
 
 html {
    background-color: $colorBGC;
@@ -12,6 +14,19 @@ html {
 
 .svg {
    width: 50px;
+}
+
+/////////////////////   main.ts
+
+.addNewCategory {
+   color: $colorWhite;
+   border-radius: 15px;
+   background-color: $colorGrey;
+   position: absolute;
+   bottom: 20px;
+   right: 20px;
+   padding: 20px;
+   border: none;
 }
 
 /////////////////////   category.ts
@@ -55,6 +70,7 @@ html {
    padding: 20px;
    color: $colorWhite;
    font-size: 20px;
+   width: 100%;
 
    &::placeholder {
       color: $colorWhite;
@@ -112,22 +128,37 @@ html {
    position: absolute;
    display: flex;
    flex-direction: column;
-   opacity: 0.9;
-   padding: 150px;
+   opacity: 0.95;
+   padding: 25px;
    left: 50%;
    top: 50%;
    transform: translate(-50%, -50%);
    border-radius: 20px;
-   background-color: $colorTitle;
+   background-color: $colorOverlay;
    animation: overlayOpacity 0.3s;
    animation-fill-mode: forwards;
+   border: 5px solid white;
 }
 
 .closeBtn {
    position: absolute;
-   top: -8px;
-   right: -8px;
    width: 54px;
+   top: -13px;
+   right: -11px;
+}
+
+.overlayDesc {
+   padding: 0;
+   margin: 0;
+   color: $colorWhite;
+}
+
+.overlayInput {
+   margin-bottom: 15px;
+   margin-top: 12px;
+   padding: 15px;
+   border: none;
+   border-radius: 15px;
 }
 
 /////////////////////   Utilities

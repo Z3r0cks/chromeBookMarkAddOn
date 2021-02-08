@@ -14,7 +14,6 @@ var BookmarkExtension;
             this.innerSVG = new BookmarkExtension.AddSVG("innerSvg", "#213044").svg;
         }
         addNewCategory() {
-            console.log("test2");
             document.getElementById("wrapper").appendChild(this.catWrapper);
             this.catWrapper.appendChild(this.titleWrapper);
             this.titleWrapper.appendChild(this.title);
@@ -22,7 +21,7 @@ var BookmarkExtension;
             this.innerWrapper.appendChild(this.innerSVG);
             this.changeIntoPlaceholder(this.title);
             this.innerSVG.addEventListener("click", () => {
-                this.addNewUrl();
+                Category.addNewUrl(this.innerSVG);
             });
         }
         changeIntoPlaceholder(title) {
@@ -34,11 +33,11 @@ var BookmarkExtension;
                 }
             });
         }
-        addNewUrl() {
+        static addNewUrl(innerSVG) {
             const newURL = new BookmarkExtension.URL();
-            this.innerWrapper.appendChild(newURL.wrapper);
-            this.innerWrapper.appendChild(this.innerSVG);
-            this.innerWrapper.nextElementSibling;
+            innerSVG.parentElement.appendChild(newURL.wrapper);
+            innerSVG.parentElement.appendChild(innerSVG);
+            innerSVG.parentElement.nextElementSibling;
             newURL.addUrlBtnEvenetlistner();
         }
     }
@@ -80,18 +79,44 @@ var BookmarkExtension;
 /// <reference path="./svgs/closeSvg.ts" />
 (function (BookmarkExtension) {
     class OverlayEditUrl {
-        constructor(url, title) {
+        constructor(svg) {
+            let innerHtml = svg.parentElement.firstChild.nextElementSibling.innerHTML;
+            let href = svg.parentElement.firstChild.nextElementSibling.href;
             this.wrapper = document.createElement("div");
             this.title = document.createElement("input");
+            this.titleText = document.createElement("p");
+            this.urlText = document.createElement("p");
             this.url = document.createElement("input");
             this.closeBtn = new BookmarkExtension.CloseSvg("closeBtn", "#74dfd9");
+            this.acceptBtn = new BookmarkExtension.AcceptSvg("acceptBtn", "#74dfd9");
+            this.titleText.innerHTML = "Add new title";
+            this.titleText.className = "overlayDesc";
+            this.urlText.innerHTML = "Add new URL";
+            this.urlText.className = "overlayDesc";
+            this.title.className = "overlayInput";
+            this.url.className = "overlayInput";
             this.wrapper.className = "overlayWrapper";
-            this.title.placeholder = title;
-            this.url.placeholder = url;
+            this.title.value = innerHtml;
+            this.url.value = href;
+            this.acceptBtn.svg.addEventListener("click", () => { this.acceptBtnHandler(svg, this.title.value, this.url.value); });
+            this.closeBtn.svg.addEventListener("click", () => { this.closeHandler(); });
+            this.wrapper.appendChild(this.titleText);
             this.wrapper.appendChild(this.title);
+            this.wrapper.appendChild(this.urlText);
             this.wrapper.appendChild(this.url);
+            this.wrapper.appendChild(this.acceptBtn.svg);
             this.wrapper.appendChild(this.closeBtn.svg);
             document.body.appendChild(this.wrapper);
+        }
+        closeHandler() {
+            this.wrapper.remove();
+        }
+        acceptBtnHandler(svg, innerHTML, href) {
+            console.log(innerHTML);
+            console.log(href);
+            svg.parentElement.firstChild.nextElementSibling.innerHTML = innerHTML;
+            svg.parentElement.firstChild.nextElementSibling.href = href;
+            this.closeHandler();
         }
     }
     BookmarkExtension.OverlayEditUrl = OverlayEditUrl;
@@ -107,19 +132,70 @@ var BookmarkExtension;
             document.body.innerHTML = "";
             document.body.innerHTML = this.innerBodyHtml;
             for (const bodyChildren of document.body.children) {
+                console.log(bodyChildren);
+                if (bodyChildren.getAttribute("class") == "addNewCategory") {
+                    this.setSVGEventlistener(bodyChildren);
+                }
                 if (bodyChildren.getAttribute("id") == "wrapper") {
                     for (const wrapperEl of bodyChildren.children) {
-                        if (wrapperEl.getAttribute("class") == "svg") {
-                            this.setSVGEventlistener(wrapperEl);
+                        if (wrapperEl.getAttribute("class") == "catWrapper") {
+                            for (const catWrapperEl of wrapperEl.children) {
+                                if (catWrapperEl.getAttribute("class") == "innerWrapper") {
+                                    for (const innerWrapperEl of catWrapperEl.children) {
+                                        if (innerWrapperEl.getAttribute("class") == "innerSvg") {
+                                            this.setInnerSvgEventlistner(innerWrapperEl);
+                                        }
+                                        if (innerWrapperEl.getAttribute("class") == "urlWrapper display-flex flex-d-row justify-c-sb") {
+                                            for (const urlWrapperEl of innerWrapperEl.children) {
+                                                if (urlWrapperEl.getAttribute("class") == "editBtn") {
+                                                    BookmarkExtension.EditSvg.addClickHandler(urlWrapperEl);
+                                                }
+                                                if (urlWrapperEl.getAttribute("class") == "deleteBtn") {
+                                                    urlWrapperEl.addEventListener("click", () => {
+                                                        urlWrapperEl.parentElement.remove();
+                                                    });
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
                         }
                     }
                 }
+                ;
             }
         }
-        setSVGEventlistener(svg) {
-            svg.addEventListener('click', () => {
+        setSVGEventlistener(btn) {
+            btn.addEventListener('click', () => {
                 const newCategory = new BookmarkExtension.Category();
                 newCategory.addNewCategory();
+            });
+        }
+        setInnerSvgEventlistner(svg) {
+            svg.addEventListener("click", () => {
+                BookmarkExtension.Category.addNewUrl(svg);
+            });
+        }
+        static replaceBodyInnerHtml() {
+            chrome.storage.sync.get(["bodyInnerHTML"], e => {
+                new Storage(e.bodyInnerHTML);
+            });
+        }
+        static saveBodyInnerHtml() {
+            chrome.storage.sync.set({ bodyInnerHTML: document.body.innerHTML });
+        }
+        static deleteSycnStorage() {
+            chrome.storage.sync.get(null, function (items) {
+                Object.keys(items).forEach(e => {
+                    chrome.storage.sync.remove(e);
+                });
+                Object.keys(items);
+            });
+        }
+        static getSyncStorage() {
+            chrome.storage.sync.get(null, function (items) {
+                console.log(Object.keys(items));
             });
         }
     }
@@ -179,7 +255,7 @@ var BookmarkExtension;
         }
         static addClickHandler(svg) {
             svg.addEventListener("click", () => {
-                new BookmarkExtension.OverlayEditUrl("test", "test");
+                new BookmarkExtension.OverlayEditUrl(svg);
             });
         }
     }
@@ -268,43 +344,37 @@ var BookmarkExtension;
 /// <reference path="./svgs/addSvg.ts" />
 /// <reference path="./Storage.ts" />
 (function (BookmarkExtension) {
+    BookmarkExtension.Storage.replaceBodyInnerHtml();
     const getSyncStorage = document.createElement("button");
     const deleteSycnStorage = document.createElement("button");
     const saveBodyInnerHtml = document.createElement("button");
     const replaceBodyInnerHtml = document.createElement("button");
-    deleteSycnStorage.innerHTML = "Delete dev Storage";
-    getSyncStorage.innerHTML = "Get dev Storage";
+    deleteSycnStorage.innerHTML = "Delete Sync Dev Storage";
+    getSyncStorage.innerHTML = "Get Sync Dev Storage";
     saveBodyInnerHtml.innerHTML = "Save Body InnerHTML";
     replaceBodyInnerHtml.innerHTML = "Replace Body InnerHtml";
     replaceBodyInnerHtml.addEventListener("click", () => {
-        chrome.storage.sync.get(["bodyInnerHTML"], e => {
-            new BookmarkExtension.Storage(e.bodyInnerHTML);
-        });
+        BookmarkExtension.Storage.replaceBodyInnerHtml();
     });
     saveBodyInnerHtml.addEventListener("click", () => {
-        chrome.storage.sync.set({ bodyInnerHTML: document.body.innerHTML });
+        BookmarkExtension.Storage.saveBodyInnerHtml();
     });
     deleteSycnStorage.addEventListener("click", () => {
-        chrome.storage.sync.get(null, function (items) {
-            Object.keys(items).forEach(e => {
-                chrome.storage.sync.remove(e);
-            });
-            Object.keys(items);
-        });
+        BookmarkExtension.Storage.deleteSycnStorage();
     });
     getSyncStorage.addEventListener("click", () => {
-        chrome.storage.sync.get(null, function (items) {
-            console.log(Object.keys(items));
-        });
+        BookmarkExtension.Storage.getSyncStorage();
     });
-    const svg = new BookmarkExtension.AddSVG("svg", "#74dfd9").svg;
+    const newAddBtn = document.createElement("button");
+    newAddBtn.className = "addNewCategory";
+    newAddBtn.innerHTML = "Add Category";
     const wrapper = document.getElementById("wrapper");
     document.body.appendChild(deleteSycnStorage);
     document.body.appendChild(getSyncStorage);
     document.body.appendChild(saveBodyInnerHtml);
     document.body.appendChild(replaceBodyInnerHtml);
-    wrapper.appendChild(svg);
-    svg.addEventListener('click', () => {
+    document.body.appendChild(newAddBtn);
+    newAddBtn.addEventListener('click', () => {
         const newCategory = new BookmarkExtension.Category();
         newCategory.addNewCategory();
     });

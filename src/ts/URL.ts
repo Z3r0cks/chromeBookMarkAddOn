@@ -13,7 +13,6 @@ namespace BookmarkExtension {
       deleteBtn: DeleteSvg;
       editBtn: EditSvg;
 
-
       constructor() {
          this.wrapper = document.createElement("div");
          this.btnWrapper = document.createElement("div");

@@ -3,54 +3,49 @@
 /// <reference path="./Storage.ts" />
 namespace BookmarkExtension {
 
+   Storage.replaceBodyInnerHtml();
+
    const getSyncStorage: HTMLButtonElement = document.createElement("button");
    const deleteSycnStorage: HTMLButtonElement = document.createElement("button");
    const saveBodyInnerHtml: HTMLButtonElement = document.createElement("button");
    const replaceBodyInnerHtml: HTMLButtonElement = document.createElement("button");
 
 
-   deleteSycnStorage.innerHTML = "Delete dev Storage";
-   getSyncStorage.innerHTML = "Get dev Storage";
+   deleteSycnStorage.innerHTML = "Delete Sync Dev Storage";
+   getSyncStorage.innerHTML = "Get Sync Dev Storage";
    saveBodyInnerHtml.innerHTML = "Save Body InnerHTML";
    replaceBodyInnerHtml.innerHTML = "Replace Body InnerHtml";
 
-
-
    replaceBodyInnerHtml.addEventListener("click", () => {
-      chrome.storage.sync.get(["bodyInnerHTML"], e => {
-         new Storage(e.bodyInnerHTML);
-      });
+      Storage.replaceBodyInnerHtml();
    })
 
    saveBodyInnerHtml.addEventListener("click", () => {
-      chrome.storage.sync.set({ bodyInnerHTML: document.body.innerHTML });
+      Storage.saveBodyInnerHtml();
    })
 
    deleteSycnStorage.addEventListener("click", () => {
-      chrome.storage.sync.get(null, function (items) {
-         Object.keys(items).forEach(e => {
-            chrome.storage.sync.remove(e);
-         });
-         Object.keys(items);
-      })
+      Storage.deleteSycnStorage();
    })
 
    getSyncStorage.addEventListener("click", () => {
-      chrome.storage.sync.get(null, function (items) {
-         console.log(Object.keys(items));
-      })
+      Storage.getSyncStorage();
    })
 
-   const svg = new AddSVG("svg", "#74dfd9").svg
+
+   const newAddBtn = document.createElement("button");
+   newAddBtn.className = "addNewCategory"
+   newAddBtn.innerHTML = "Add Category"
+
    const wrapper: HTMLElement = document.getElementById("wrapper");
    document.body.appendChild(deleteSycnStorage);
    document.body.appendChild(getSyncStorage);
    document.body.appendChild(saveBodyInnerHtml);
    document.body.appendChild(replaceBodyInnerHtml);
 
-   wrapper.appendChild(svg);
+   document.body.appendChild(newAddBtn);
 
-   svg.addEventListener('click', () => {
+   newAddBtn.addEventListener('click', () => {
       const newCategory: Category = new Category();
       newCategory.addNewCategory();
    })

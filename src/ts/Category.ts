@@ -4,7 +4,7 @@ namespace BookmarkExtension {
       titleWrapper: HTMLElement;
       title: HTMLInputElement;
       innerWrapper: HTMLElement;
-      innerSVG: SVGSVGElement;
+      innerSVG: SVGElement;
 
       constructor() {
          this.catWrapper = document.createElement("div");
@@ -20,7 +20,6 @@ namespace BookmarkExtension {
       }
 
       addNewCategory() {
-         console.log("test2");
          document.getElementById("wrapper").appendChild(this.catWrapper);
          this.catWrapper.appendChild(this.titleWrapper);
          this.titleWrapper.appendChild(this.title);
@@ -28,7 +27,7 @@ namespace BookmarkExtension {
          this.innerWrapper.appendChild(this.innerSVG);
          this.changeIntoPlaceholder(this.title);
          this.innerSVG.addEventListener("click", () => {
-            this.addNewUrl();
+            Category.addNewUrl(this.innerSVG);
          })
       }
 
@@ -42,11 +41,11 @@ namespace BookmarkExtension {
          })
       }
 
-      addNewUrl() {
+      static addNewUrl(innerSVG: SVGElement) {
          const newURL: URL = new URL();
-         this.innerWrapper.appendChild(newURL.wrapper)
-         this.innerWrapper.appendChild(this.innerSVG)
-         this.innerWrapper.nextElementSibling
+         innerSVG.parentElement.appendChild(newURL.wrapper)
+         innerSVG.parentElement.appendChild(innerSVG)
+         innerSVG.parentElement.nextElementSibling
          newURL.addUrlBtnEvenetlistner();
       }
    }

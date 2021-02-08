@@ -21,7 +21,7 @@ namespace BookmarkExtension {
 
       static addClickHandler(svg) {
          svg.addEventListener("click", () => {
-            new OverlayEditUrl("test", "test");
+            new OverlayEditUrl(svg);
          })
       }
    }
