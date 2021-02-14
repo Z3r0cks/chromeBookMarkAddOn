@@ -1,5 +1,6 @@
 {
    "dependencies": {
-      "@types/chrome": "^0.0.127"
+      "@types/chrome": "^0.0.127",
+      "bootstrap": "^5.0.0-beta1"
    }
 }

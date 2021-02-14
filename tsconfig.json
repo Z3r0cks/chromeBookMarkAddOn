@@ -2,8 +2,7 @@
   "compilerOptions": {
     "target": "es6",
     "module": "system",
-    // "sourceMap": true,
+    "sourceMap": true,
     "outFile": "./dist/js/content.js",
-    "typeRoots": [ "node_modules/@types" ]
   }
 }

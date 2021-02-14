@@ -1,80 +1,76 @@
 namespace BookmarkExtension {
    export class Storage {
-      innerBodyHtml: string;
 
-      constructor(innerBodyHtml: string) {
-         this.innerBodyHtml = innerBodyHtml;
-         this.disassmbleElements();
-      }
+      static disassembleElements() {
+         for (const bodyChildren of document.getElementById("wrapper").children) {
 
-      disassmbleElements() {
-         document.body.innerHTML = ""
-         document.body.innerHTML = this.innerBodyHtml;
+            if (bodyChildren.getAttribute("class") == "catWrapper") {
 
-         for (const bodyChildren of document.body.children) {
-            console.log(bodyChildren);
-            if (bodyChildren.getAttribute("class") == "addNewCategory") {
-               this.setSVGEventlistener(bodyChildren);
-            }
+               for (const catWrapperEl of bodyChildren.children) {
+                  if (catWrapperEl.getAttribute("class") == "innerWrapper") {
 
-            if (bodyChildren.getAttribute("id") == "wrapper") {
+                     for (const innerWrapperEl of catWrapperEl.children) {
+                        if (innerWrapperEl.getAttribute("class") == "innerSvg") {
+                           Storage.setInnerSvgEventlistner(innerWrapperEl);
+                        }
+                        if (innerWrapperEl.getAttribute("class") == "urlWrapper display-flex flex-d-row justify-c-sb") {
 
-               for (const wrapperEl of bodyChildren.children) {
-                  if (wrapperEl.getAttribute("class") == "catWrapper") {
-
-                     for (const catWrapperEl of wrapperEl.children) {
-                        if (catWrapperEl.getAttribute("class") == "innerWrapper") {
-
-                           for (const innerWrapperEl of catWrapperEl.children) {
-                              if (innerWrapperEl.getAttribute("class") == "innerSvg") {
-                                 this.setInnerSvgEventlistner(innerWrapperEl);
+                           for (const urlWrapperEl of innerWrapperEl.children) {
+                              if (urlWrapperEl.getAttribute("class") == "editBtn") {
+                                 EditSvg.addClickHandler(urlWrapperEl);
                               }
-                              if (innerWrapperEl.getAttribute("class") == "urlWrapper display-flex flex-d-row justify-c-sb") {
-
-                                 for (const urlWrapperEl of innerWrapperEl.children) {
-                                    if (urlWrapperEl.getAttribute("class") == "editBtn") {
-                                       EditSvg.addClickHandler(urlWrapperEl);
-                                    }
-                                    if (urlWrapperEl.getAttribute("class") == "deleteBtn") {
-                                       urlWrapperEl.addEventListener("click", () => {
-                                          urlWrapperEl.parentElement.remove()
-                                       })
-                                    }
-                                 }
+                              if (urlWrapperEl.getAttribute("class") == "deleteBtn") {
+                                 urlWrapperEl.addEventListener("click", () => {
+                                    urlWrapperEl.parentElement.remove()
+                                 })
                               }
                            }
                         }
                      }
                   }
                }
-            };
+            }
          }
       }
 
-      setSVGEventlistener(btn) {
+      static setSVGEventlistener(btn) {
          btn.addEventListener('click', () => {
             const newCategory = new Category();
             newCategory.addNewCategory();
          })
       }
 
-      setInnerSvgEventlistner(svg) {
+      static setInnerSvgEventlistner(svg) {
          svg.addEventListener("click", () => {
             Category.addNewUrl(svg)
          })
       }
 
-      static replaceBodyInnerHtml() {
-         chrome.storage.sync.get(["bodyInnerHTML"], e => {
-            new Storage(e.bodyInnerHTML);
-         });
+      // new Storage(e.bodyInnerHTML);
+
+
+      static async replaceBodyInnerHtml() {
+         await callGoogleSyncFunction();
+         Storage.disassembleElements()
+
+         function callGoogleSyncFunction() {
+            return new Promise(resolve => {
+               console.log("replaceBodyInnerHtm");
+               chrome.storage.sync.get(["bodyInnerHTML"], e => {
+                  document.getElementById("wrapper").innerHTML = e.bodyInnerHTML;
+                  resolve(document.getElementById("wrapper"));
+               });
+            })
+         }
       }
 
       static saveBodyInnerHtml() {
-         chrome.storage.sync.set({ bodyInnerHTML: document.body.innerHTML });
+         console.log("saveBodyInnerHtml");
+         chrome.storage.sync.set({ bodyInnerHTML: document.getElementById("wrapper").innerHTML });
       }
 
       static deleteSycnStorage() {
+         console.log("deleteSycnStorage");
          chrome.storage.sync.get(null, function (items) {
             Object.keys(items).forEach(e => {
                chrome.storage.sync.remove(e);
@@ -84,6 +80,7 @@ namespace BookmarkExtension {
       }
 
       static getSyncStorage() {
+         console.log("getSyncStorage");
          chrome.storage.sync.get(null, function (items) {
             console.log(Object.keys(items));
          })

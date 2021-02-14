@@ -17,83 +17,6 @@ html {
   border: none;
 }
 
-#wrapper {
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
-  position: absolute;
-  color: #fff;
-  top: 50%;
-  left: 50%;
-  -webkit-transform: translate(-50%, -50%);
-          transform: translate(-50%, -50%);
-  font-size: 25px;
-}
-
-.catWrapper {
-  border-radius: 20px;
-  margin: 50px;
-  background-color: #11adb8;
-  height: -webkit-fit-content;
-  height: -moz-fit-content;
-  height: fit-content;
-}
-
-.innerWrapper {
-  text-align: center;
-  border: none;
-  border-radius: 0 0 20px 20px;
-  padding: 50px;
-}
-
-.titleWrapper {
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-box-pack: center;
-      -ms-flex-pack: center;
-          justify-content: center;
-  -webkit-box-align: center;
-      -ms-flex-align: center;
-          align-items: center;
-}
-
-.title {
-  background-color: #98dee7;
-  border-radius: 20px 20px 0 0;
-  border: none;
-  padding: 5px;
-  text-align: center;
-  padding: 20px;
-  color: #fff;
-  font-size: 20px;
-  width: 100%;
-}
-
-.title::-webkit-input-placeholder {
-  color: #fff;
-  font-size: 20px;
-}
-
-.title:-ms-input-placeholder {
-  color: #fff;
-  font-size: 20px;
-}
-
-.title::-ms-input-placeholder {
-  color: #fff;
-  font-size: 20px;
-}
-
-.title::placeholder {
-  color: #fff;
-  font-size: 20px;
-}
-
-.innerSvg {
-  width: 25px;
-}
-
 .deleteBtn,
 .acceptBtn,
 .editBtn {
@@ -233,5 +156,84 @@ html {
   to {
     top: 50%;
   }
+}
+
+#wrapper {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  position: absolute;
+  color: #fff;
+  top: 50%;
+  left: 50%;
+  -webkit-transform: translate(-50%, -50%);
+          transform: translate(-50%, -50%);
+  font-size: 25px;
+}
+
+.catWrapper {
+  width: 250px;
+  min-height: 250px;
+  border-radius: 20px;
+  margin: 10px;
+  background-color: #11adb8;
+  height: -webkit-fit-content;
+  height: -moz-fit-content;
+  height: fit-content;
+}
+
+.innerWrapper {
+  text-align: center;
+  border: none;
+  border-radius: 0 0 20px 20px;
+  padding: 20px;
+}
+
+.titleWrapper {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+
+.title {
+  background-color: #98dee7;
+  border-radius: 20px 20px 0 0;
+  border: none;
+  padding: 5px;
+  text-align: center;
+  padding: 20px;
+  color: #fff;
+  font-size: 20px;
+  width: 100%;
+}
+
+.title::-webkit-input-placeholder {
+  color: #fff;
+  font-size: 20px;
+}
+
+.title:-ms-input-placeholder {
+  color: #fff;
+  font-size: 20px;
+}
+
+.title::-ms-input-placeholder {
+  color: #fff;
+  font-size: 20px;
+}
+
+.title::placeholder {
+  color: #fff;
+  font-size: 20px;
+}
+
+.innerSvg {
+  width: 25px;
 }
 /*# sourceMappingURL=style.css.map */

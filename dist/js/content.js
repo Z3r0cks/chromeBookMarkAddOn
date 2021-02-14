@@ -1,3 +1,12 @@
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
 var BookmarkExtension;
 (function (BookmarkExtension) {
     class Category {
@@ -112,8 +121,6 @@ var BookmarkExtension;
             this.wrapper.remove();
         }
         acceptBtnHandler(svg, innerHTML, href) {
-            console.log(innerHTML);
-            console.log(href);
             svg.parentElement.firstChild.nextElementSibling.innerHTML = innerHTML;
             svg.parentElement.firstChild.nextElementSibling.href = href;
             this.closeHandler();
@@ -124,38 +131,24 @@ var BookmarkExtension;
 var BookmarkExtension;
 (function (BookmarkExtension) {
     class Storage {
-        constructor(innerBodyHtml) {
-            this.innerBodyHtml = innerBodyHtml;
-            this.disassmbleElements();
-        }
-        disassmbleElements() {
-            document.body.innerHTML = "";
-            document.body.innerHTML = this.innerBodyHtml;
-            for (const bodyChildren of document.body.children) {
-                console.log(bodyChildren);
-                if (bodyChildren.getAttribute("class") == "addNewCategory") {
-                    this.setSVGEventlistener(bodyChildren);
-                }
-                if (bodyChildren.getAttribute("id") == "wrapper") {
-                    for (const wrapperEl of bodyChildren.children) {
-                        if (wrapperEl.getAttribute("class") == "catWrapper") {
-                            for (const catWrapperEl of wrapperEl.children) {
-                                if (catWrapperEl.getAttribute("class") == "innerWrapper") {
-                                    for (const innerWrapperEl of catWrapperEl.children) {
-                                        if (innerWrapperEl.getAttribute("class") == "innerSvg") {
-                                            this.setInnerSvgEventlistner(innerWrapperEl);
+        static disassembleElements() {
+            for (const bodyChildren of document.getElementById("wrapper").children) {
+                if (bodyChildren.getAttribute("class") == "catWrapper") {
+                    for (const catWrapperEl of bodyChildren.children) {
+                        if (catWrapperEl.getAttribute("class") == "innerWrapper") {
+                            for (const innerWrapperEl of catWrapperEl.children) {
+                                if (innerWrapperEl.getAttribute("class") == "innerSvg") {
+                                    Storage.setInnerSvgEventlistner(innerWrapperEl);
+                                }
+                                if (innerWrapperEl.getAttribute("class") == "urlWrapper display-flex flex-d-row justify-c-sb") {
+                                    for (const urlWrapperEl of innerWrapperEl.children) {
+                                        if (urlWrapperEl.getAttribute("class") == "editBtn") {
+                                            BookmarkExtension.EditSvg.addClickHandler(urlWrapperEl);
                                         }
-                                        if (innerWrapperEl.getAttribute("class") == "urlWrapper display-flex flex-d-row justify-c-sb") {
-                                            for (const urlWrapperEl of innerWrapperEl.children) {
-                                                if (urlWrapperEl.getAttribute("class") == "editBtn") {
-                                                    BookmarkExtension.EditSvg.addClickHandler(urlWrapperEl);
-                                                }
-                                                if (urlWrapperEl.getAttribute("class") == "deleteBtn") {
-                                                    urlWrapperEl.addEventListener("click", () => {
-                                                        urlWrapperEl.parentElement.remove();
-                                                    });
-                                                }
-                                            }
+                                        if (urlWrapperEl.getAttribute("class") == "deleteBtn") {
+                                            urlWrapperEl.addEventListener("click", () => {
+                                                urlWrapperEl.parentElement.remove();
+                                            });
                                         }
                                     }
                                 }
@@ -163,29 +156,41 @@ var BookmarkExtension;
                         }
                     }
                 }
-                ;
             }
         }
-        setSVGEventlistener(btn) {
+        static setSVGEventlistener(btn) {
             btn.addEventListener('click', () => {
                 const newCategory = new BookmarkExtension.Category();
                 newCategory.addNewCategory();
             });
         }
-        setInnerSvgEventlistner(svg) {
+        static setInnerSvgEventlistner(svg) {
             svg.addEventListener("click", () => {
                 BookmarkExtension.Category.addNewUrl(svg);
             });
         }
+        // new Storage(e.bodyInnerHTML);
         static replaceBodyInnerHtml() {
-            chrome.storage.sync.get(["bodyInnerHTML"], e => {
-                new Storage(e.bodyInnerHTML);
+            return __awaiter(this, void 0, void 0, function* () {
+                yield callGoogleSyncFunction();
+                Storage.disassembleElements();
+                function callGoogleSyncFunction() {
+                    return new Promise(resolve => {
+                        console.log("replaceBodyInnerHtm");
+                        chrome.storage.sync.get(["bodyInnerHTML"], e => {
+                            document.getElementById("wrapper").innerHTML = e.bodyInnerHTML;
+                            resolve(document.getElementById("wrapper"));
+                        });
+                    });
+                }
             });
         }
         static saveBodyInnerHtml() {
-            chrome.storage.sync.set({ bodyInnerHTML: document.body.innerHTML });
+            console.log("saveBodyInnerHtml");
+            chrome.storage.sync.set({ bodyInnerHTML: document.getElementById("wrapper").innerHTML });
         }
         static deleteSycnStorage() {
+            console.log("deleteSycnStorage");
             chrome.storage.sync.get(null, function (items) {
                 Object.keys(items).forEach(e => {
                     chrome.storage.sync.remove(e);
@@ -194,6 +199,7 @@ var BookmarkExtension;
             });
         }
         static getSyncStorage() {
+            console.log("getSyncStorage");
             chrome.storage.sync.get(null, function (items) {
                 console.log(Object.keys(items));
             });
@@ -344,38 +350,43 @@ var BookmarkExtension;
 /// <reference path="./svgs/addSvg.ts" />
 /// <reference path="./Storage.ts" />
 (function (BookmarkExtension) {
-    BookmarkExtension.Storage.replaceBodyInnerHtml();
-    const getSyncStorage = document.createElement("button");
-    const deleteSycnStorage = document.createElement("button");
-    const saveBodyInnerHtml = document.createElement("button");
-    const replaceBodyInnerHtml = document.createElement("button");
-    deleteSycnStorage.innerHTML = "Delete Sync Dev Storage";
-    getSyncStorage.innerHTML = "Get Sync Dev Storage";
-    saveBodyInnerHtml.innerHTML = "Save Body InnerHTML";
-    replaceBodyInnerHtml.innerHTML = "Replace Body InnerHtml";
-    replaceBodyInnerHtml.addEventListener("click", () => {
-        BookmarkExtension.Storage.replaceBodyInnerHtml();
-    });
-    saveBodyInnerHtml.addEventListener("click", () => {
-        BookmarkExtension.Storage.saveBodyInnerHtml();
-    });
-    deleteSycnStorage.addEventListener("click", () => {
-        BookmarkExtension.Storage.deleteSycnStorage();
-    });
-    getSyncStorage.addEventListener("click", () => {
-        BookmarkExtension.Storage.getSyncStorage();
-    });
+    //TODO: Kein Hinzufügen sobald keine URL eingegeben wurde
+    // Storage.replaceBodyInnerHtml();
+    function createDevButtons() {
+        const getSyncStorage = document.createElement("button");
+        const deleteSycnStorage = document.createElement("button");
+        const saveBodyInnerHtml = document.createElement("button");
+        const replaceBodyInnerHtml = document.createElement("button");
+        deleteSycnStorage.innerHTML = "Delete Sync Dev Storage";
+        getSyncStorage.innerHTML = "Get Sync Dev Storage";
+        saveBodyInnerHtml.innerHTML = "Save Body InnerHTML";
+        replaceBodyInnerHtml.innerHTML = "Replace Body InnerHtml";
+        replaceBodyInnerHtml.addEventListener("click", () => {
+            BookmarkExtension.Storage.replaceBodyInnerHtml();
+        });
+        saveBodyInnerHtml.addEventListener("click", () => {
+            BookmarkExtension.Storage.saveBodyInnerHtml();
+        });
+        deleteSycnStorage.addEventListener("click", () => {
+            BookmarkExtension.Storage.deleteSycnStorage();
+        });
+        getSyncStorage.addEventListener("click", () => {
+            BookmarkExtension.Storage.getSyncStorage();
+        });
+        document.body.appendChild(deleteSycnStorage);
+        document.body.appendChild(getSyncStorage);
+        document.body.appendChild(saveBodyInnerHtml);
+        document.body.appendChild(replaceBodyInnerHtml);
+    }
+    createDevButtons();
     const newAddBtn = document.createElement("button");
     newAddBtn.className = "addNewCategory";
     newAddBtn.innerHTML = "Add Category";
     const wrapper = document.getElementById("wrapper");
-    document.body.appendChild(deleteSycnStorage);
-    document.body.appendChild(getSyncStorage);
-    document.body.appendChild(saveBodyInnerHtml);
-    document.body.appendChild(replaceBodyInnerHtml);
     document.body.appendChild(newAddBtn);
     newAddBtn.addEventListener('click', () => {
         const newCategory = new BookmarkExtension.Category();
         newCategory.addNewCategory();
     });
 })(BookmarkExtension || (BookmarkExtension = {}));
+//# sourceMappingURL=content.js.map

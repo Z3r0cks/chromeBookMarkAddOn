@@ -1,0 +1,38 @@
+
+.deleteBtn,
+.acceptBtn,
+.editBtn {
+   width: 25px;
+}
+
+.urlWrapper {
+   display: flex;
+   flex-direction: column;
+   margin-bottom: 1rem;
+}
+
+.urlTitle,
+.url {
+   border: solid 1px #74dfd9;
+   background-color: $colorCatBGC;
+   padding: 7px;
+   border-radius: 20px;
+   color: $colorWhite;
+
+   &::placeholder {
+      color: $colorWhite;
+   }
+}
+
+.url {
+   margin-bottom: 5px;
+}
+
+.newUrl {
+   color: inherit;
+   margin-bottom: 0.5rem;
+}
+
+.urlTitle {
+   margin-bottom: 5px;
+}

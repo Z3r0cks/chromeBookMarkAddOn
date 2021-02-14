@@ -47,8 +47,6 @@ namespace BookmarkExtension {
       }
 
       acceptBtnHandler(svg, innerHTML, href) {
-         console.log(innerHTML);
-         console.log(href);
          svg.parentElement.firstChild.nextElementSibling.innerHTML = innerHTML;
          svg.parentElement.firstChild.nextElementSibling.href = href;
          this.closeHandler();
