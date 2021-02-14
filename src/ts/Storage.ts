@@ -3,10 +3,11 @@ namespace BookmarkExtension {
 
       static disassembleElements() {
          for (const bodyChildren of document.getElementById("wrapper").children) {
-
             if (bodyChildren.getAttribute("class") == "catWrapper") {
-
                for (const catWrapperEl of bodyChildren.children) {
+                  if (catWrapperEl.getAttribute("class") == "titleWrapper") {
+                     Category.changeIntoPlaceholder((catWrapperEl.firstChild as HTMLInputElement));
+                  }
                   if (catWrapperEl.getAttribute("class") == "innerWrapper") {
 
                      for (const innerWrapperEl of catWrapperEl.children) {
@@ -30,6 +31,12 @@ namespace BookmarkExtension {
                   }
                }
             }
+         }
+      }
+
+      static parseStorage() {
+         for (const category of CategoryList) {
+            console.log(category.catWrapperColor);
          }
       }
 

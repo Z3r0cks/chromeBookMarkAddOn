@@ -3,7 +3,9 @@
 /// <reference path="./Storage.ts" />
 namespace BookmarkExtension {
 
-   //TODO: Kein Hinzufügen sobald keine URL eingegeben wurde
+   export const CategoryList: Category[] = [];
+
+   //TODO: Auslagern der Storage, da chrome.sync begrenzt -> parseStorge() > Storage
 
    // Storage.replaceBodyInnerHtml();
    function createDevButtons() {
@@ -22,7 +24,8 @@ namespace BookmarkExtension {
       })
 
       saveBodyInnerHtml.addEventListener("click", () => {
-         Storage.saveBodyInnerHtml();
+         // Storage.saveBodyInnerHtml();
+         Storage.parseStorage();
       })
 
       deleteSycnStorage.addEventListener("click", () => {
@@ -48,6 +51,9 @@ namespace BookmarkExtension {
    document.body.appendChild(newAddBtn);
    newAddBtn.addEventListener('click', () => {
       const newCategory: Category = new Category();
+      CategoryList.push(newCategory);
       newCategory.addNewCategory();
+      console.log(CategoryList);
    })
+
 }

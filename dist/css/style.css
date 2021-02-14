@@ -176,7 +176,6 @@ html {
   min-height: 250px;
   border-radius: 20px;
   margin: 10px;
-  background-color: #11adb8;
   height: -webkit-fit-content;
   height: -moz-fit-content;
   height: fit-content;
@@ -202,7 +201,6 @@ html {
 }
 
 .title {
-  background-color: #98dee7;
   border-radius: 20px 20px 0 0;
   border: none;
   padding: 5px;

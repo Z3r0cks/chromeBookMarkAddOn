@@ -12,34 +12,41 @@ var BookmarkExtension;
     class Category {
         constructor() {
             this.catWrapper = document.createElement("div");
+            this.catWrapperColor = "#11adb8";
             this.titleWrapper = document.createElement("div");
             this.title = document.createElement("input");
             this.innerWrapper = document.createElement("div");
             this.title.className = "title";
             this.title.placeholder = "type title";
+            this.titleColor = "#74dfd9";
             this.catWrapper.className = "catWrapper";
             this.innerWrapper.className = "innerWrapper";
             this.titleWrapper.className = "titleWrapper";
             this.innerSVG = new BookmarkExtension.AddSVG("innerSvg", "#213044").svg;
+            Category.setBGColor(this.catWrapper, this.catWrapperColor);
+            Category.setBGColor(this.title, this.titleColor);
         }
         addNewCategory() {
-            document.getElementById("wrapper").appendChild(this.catWrapper);
-            this.catWrapper.appendChild(this.titleWrapper);
-            this.titleWrapper.appendChild(this.title);
-            this.catWrapper.appendChild(this.innerWrapper);
-            this.innerWrapper.appendChild(this.innerSVG);
-            this.changeIntoPlaceholder(this.title);
-            this.innerSVG.addEventListener("click", () => {
-                Category.addNewUrl(this.innerSVG);
-            });
+            const wrapperEl = document.getElementById("wrapper");
+            if (wrapperEl.children.length <= 3) {
+                wrapperEl.appendChild(this.catWrapper);
+                this.catWrapper.appendChild(this.titleWrapper);
+                this.titleWrapper.appendChild(this.title);
+                this.catWrapper.appendChild(this.innerWrapper);
+                this.innerWrapper.appendChild(this.innerSVG);
+                Category.changeIntoPlaceholder(this.title);
+                this.innerSVG.addEventListener("click", () => {
+                    Category.addNewUrl(this.innerSVG);
+                });
+            }
         }
-        changeIntoPlaceholder(title) {
-            title.addEventListener("keypress", e => {
-                if (e.key == "Enter") {
-                    title.placeholder = title.value;
-                    title.value = "";
-                    title.blur();
-                }
+        static setBGColor(HTMLel, color) {
+            HTMLel.setAttribute("style", " background-color:" + color);
+        }
+        static changeIntoPlaceholder(title) {
+            title.addEventListener("blur", () => {
+                title.placeholder = title.value;
+                title.value = "";
             });
         }
         static addNewUrl(innerSVG) {
@@ -135,6 +142,9 @@ var BookmarkExtension;
             for (const bodyChildren of document.getElementById("wrapper").children) {
                 if (bodyChildren.getAttribute("class") == "catWrapper") {
                     for (const catWrapperEl of bodyChildren.children) {
+                        if (catWrapperEl.getAttribute("class") == "titleWrapper") {
+                            BookmarkExtension.Category.changeIntoPlaceholder(catWrapperEl.firstChild);
+                        }
                         if (catWrapperEl.getAttribute("class") == "innerWrapper") {
                             for (const innerWrapperEl of catWrapperEl.children) {
                                 if (innerWrapperEl.getAttribute("class") == "innerSvg") {
@@ -156,6 +166,11 @@ var BookmarkExtension;
                         }
                     }
                 }
+            }
+        }
+        static parseStorage() {
+            for (const category of BookmarkExtension.CategoryList) {
+                console.log(category.catWrapperColor);
             }
         }
         static setSVGEventlistener(btn) {
@@ -350,7 +365,9 @@ var BookmarkExtension;
 /// <reference path="./svgs/addSvg.ts" />
 /// <reference path="./Storage.ts" />
 (function (BookmarkExtension) {
+    BookmarkExtension.CategoryList = [];
     //TODO: Kein Hinzufügen sobald keine URL eingegeben wurde
+    //TODO: Placeholder im category title wird nicht gesynct
     // Storage.replaceBodyInnerHtml();
     function createDevButtons() {
         const getSyncStorage = document.createElement("button");
@@ -365,7 +382,8 @@ var BookmarkExtension;
             BookmarkExtension.Storage.replaceBodyInnerHtml();
         });
         saveBodyInnerHtml.addEventListener("click", () => {
-            BookmarkExtension.Storage.saveBodyInnerHtml();
+            // Storage.saveBodyInnerHtml();
+            BookmarkExtension.Storage.parseStorage();
         });
         deleteSycnStorage.addEventListener("click", () => {
             BookmarkExtension.Storage.deleteSycnStorage();
@@ -386,7 +404,9 @@ var BookmarkExtension;
     document.body.appendChild(newAddBtn);
     newAddBtn.addEventListener('click', () => {
         const newCategory = new BookmarkExtension.Category();
+        BookmarkExtension.CategoryList.push(newCategory);
         newCategory.addNewCategory();
+        console.log(BookmarkExtension.CategoryList);
     });
 })(BookmarkExtension || (BookmarkExtension = {}));
 //# sourceMappingURL=content.js.map
