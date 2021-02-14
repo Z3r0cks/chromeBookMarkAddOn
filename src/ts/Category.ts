@@ -7,6 +7,7 @@ namespace BookmarkExtension {
       titleColor: string;
       innerWrapper: HTMLElement;
       innerSVG: SVGElement;
+      urlArray: URL[];
 
       constructor() {
          this.catWrapper = document.createElement("div");
@@ -21,6 +22,7 @@ namespace BookmarkExtension {
          this.innerWrapper.className = "innerWrapper";
          this.titleWrapper.className = "titleWrapper";
          this.innerSVG = new AddSVG("innerSvg", "#213044").svg;
+         this.urlArray = [];
          Category.setBGColor(this.catWrapper, this.catWrapperColor);
          Category.setBGColor(this.title, this.titleColor);
       }
@@ -35,9 +37,17 @@ namespace BookmarkExtension {
             this.innerWrapper.appendChild(this.innerSVG);
             Category.changeIntoPlaceholder(this.title);
             this.innerSVG.addEventListener("click", () => {
-               Category.addNewUrl(this.innerSVG);
+               Category.addNewUrl(this.innerSVG, this.urlArray);
             })
          }
+      }
+
+      static pushIntoURLArray(urlArray: URL[], URL: URL) {
+         urlArray.push(URL);
+      }
+
+      static pushURLinURLArray(urlArray: URL[], url: URL) {
+         urlArray.push(url);
       }
 
       static setBGColor(HTMLel: HTMLDivElement, color: String) {
@@ -51,8 +61,8 @@ namespace BookmarkExtension {
          })
       }
 
-      static addNewUrl(innerSVG: SVGElement) {
-         const newURL: URL = new URL();
+      static addNewUrl(innerSVG: SVGElement, urlArray: URL[]) {
+         const newURL: URLWrapper = new URLWrapper(urlArray);
          innerSVG.parentElement.appendChild(newURL.wrapper)
          innerSVG.parentElement.appendChild(innerSVG)
          innerSVG.parentElement.nextElementSibling

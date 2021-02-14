@@ -13,19 +13,21 @@ namespace BookmarkExtension {
       const deleteSycnStorage: HTMLButtonElement = document.createElement("button");
       const saveBodyInnerHtml: HTMLButtonElement = document.createElement("button");
       const replaceBodyInnerHtml: HTMLButtonElement = document.createElement("button");
+      const parseStorage: HTMLButtonElement = document.createElement("button");
 
       deleteSycnStorage.innerHTML = "Delete Sync Dev Storage";
       getSyncStorage.innerHTML = "Get Sync Dev Storage";
       saveBodyInnerHtml.innerHTML = "Save Body InnerHTML";
       replaceBodyInnerHtml.innerHTML = "Replace Body InnerHtml";
+      parseStorage.innerHTML = "Parse Storage";
 
       replaceBodyInnerHtml.addEventListener("click", () => {
          Storage.replaceBodyInnerHtml();
       })
 
       saveBodyInnerHtml.addEventListener("click", () => {
-         // Storage.saveBodyInnerHtml();
-         Storage.parseStorage();
+         Storage.saveBodyInnerHtml();
+         // Storage.parseStorage();
       })
 
       deleteSycnStorage.addEventListener("click", () => {
@@ -36,10 +38,15 @@ namespace BookmarkExtension {
          Storage.getSyncStorage();
       })
 
+      parseStorage.addEventListener("click", () => {
+         Storage.parseStorage();
+      })
+
       document.body.appendChild(deleteSycnStorage);
       document.body.appendChild(getSyncStorage);
-      document.body.appendChild(saveBodyInnerHtml);
       document.body.appendChild(replaceBodyInnerHtml);
+      document.body.appendChild(saveBodyInnerHtml);
+      document.body.appendChild(parseStorage);
    }
    createDevButtons();
 

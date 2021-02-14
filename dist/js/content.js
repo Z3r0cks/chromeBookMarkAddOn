@@ -23,6 +23,7 @@ var BookmarkExtension;
             this.innerWrapper.className = "innerWrapper";
             this.titleWrapper.className = "titleWrapper";
             this.innerSVG = new BookmarkExtension.AddSVG("innerSvg", "#213044").svg;
+            this.urlArray = [];
             Category.setBGColor(this.catWrapper, this.catWrapperColor);
             Category.setBGColor(this.title, this.titleColor);
         }
@@ -36,9 +37,15 @@ var BookmarkExtension;
                 this.innerWrapper.appendChild(this.innerSVG);
                 Category.changeIntoPlaceholder(this.title);
                 this.innerSVG.addEventListener("click", () => {
-                    Category.addNewUrl(this.innerSVG);
+                    Category.addNewUrl(this.innerSVG, this.urlArray);
                 });
             }
+        }
+        static pushIntoURLArray(urlArray, URL) {
+            urlArray.push(URL);
+        }
+        static pushURLinURLArray(urlArray, url) {
+            urlArray.push(url);
         }
         static setBGColor(HTMLel, color) {
             HTMLel.setAttribute("style", " background-color:" + color);
@@ -49,8 +56,8 @@ var BookmarkExtension;
                 title.value = "";
             });
         }
-        static addNewUrl(innerSVG) {
-            const newURL = new BookmarkExtension.URL();
+        static addNewUrl(innerSVG, urlArray) {
+            const newURL = new BookmarkExtension.URLWrapper(urlArray);
             innerSVG.parentElement.appendChild(newURL.wrapper);
             innerSVG.parentElement.appendChild(innerSVG);
             innerSVG.parentElement.nextElementSibling;
@@ -147,9 +154,10 @@ var BookmarkExtension;
                         }
                         if (catWrapperEl.getAttribute("class") == "innerWrapper") {
                             for (const innerWrapperEl of catWrapperEl.children) {
-                                if (innerWrapperEl.getAttribute("class") == "innerSvg") {
-                                    Storage.setInnerSvgEventlistner(innerWrapperEl);
-                                }
+                                //TODO
+                                // if (innerWrapperEl.getAttribute("class") == "innerSvg") {
+                                //    Storage.setInnerSvgEventlistner(innerWrapperEl);
+                                // }
                                 if (innerWrapperEl.getAttribute("class") == "urlWrapper display-flex flex-d-row justify-c-sb") {
                                     for (const urlWrapperEl of innerWrapperEl.children) {
                                         if (urlWrapperEl.getAttribute("class") == "editBtn") {
@@ -169,9 +177,16 @@ var BookmarkExtension;
             }
         }
         static parseStorage() {
-            for (const category of BookmarkExtension.CategoryList) {
-                console.log(category.catWrapperColor);
-            }
+            console.log("parseStorage");
+            let thisSaveFile = new BookmarkExtension.saveFile;
+            chrome.storage.sync.get(["bodyInnerHTML"], e => {
+                for (const iterator of e.bodyInnerHTML) {
+                    // console.log(iterator.catWrapperColor);
+                    thisSaveFile.createNewSaveFile(iterator.catWrapperColor, iterator.titleColor, iterator.urlArray);
+                }
+                chrome.storage.sync.set({ bodyInnerHTML: thisSaveFile });
+                // console.log(thisSaveFile);
+            });
         }
         static setSVGEventlistener(btn) {
             btn.addEventListener('click', () => {
@@ -179,11 +194,12 @@ var BookmarkExtension;
                 newCategory.addNewCategory();
             });
         }
-        static setInnerSvgEventlistner(svg) {
-            svg.addEventListener("click", () => {
-                BookmarkExtension.Category.addNewUrl(svg);
-            });
-        }
+        //TODO
+        // static setInnerSvgEventlistner(svg) {
+        //    svg.addEventListener("click", () => {
+        //       Category.addNewUrl(svg)
+        //    })
+        // }
         // new Storage(e.bodyInnerHTML);
         static replaceBodyInnerHtml() {
             return __awaiter(this, void 0, void 0, function* () {
@@ -202,7 +218,8 @@ var BookmarkExtension;
         }
         static saveBodyInnerHtml() {
             console.log("saveBodyInnerHtml");
-            chrome.storage.sync.set({ bodyInnerHTML: document.getElementById("wrapper").innerHTML });
+            // chrome.storage.sync.set({ bodyInnerHTML: document.getElementById("wrapper").innerHTML });
+            chrome.storage.sync.set({ bodyInnerHTML: BookmarkExtension.CategoryList });
         }
         static deleteSycnStorage() {
             console.log("deleteSycnStorage");
@@ -215,12 +232,22 @@ var BookmarkExtension;
         }
         static getSyncStorage() {
             console.log("getSyncStorage");
-            chrome.storage.sync.get(null, function (items) {
-                console.log(Object.keys(items));
+            chrome.storage.sync.get(["bodyInnerHTML"], e => {
+                console.log(e);
             });
         }
     }
     BookmarkExtension.Storage = Storage;
+})(BookmarkExtension || (BookmarkExtension = {}));
+var BookmarkExtension;
+(function (BookmarkExtension) {
+    class URL {
+        constructor(title, url) {
+            this.title = title;
+            this.url = url;
+        }
+    }
+    BookmarkExtension.URL = URL;
 })(BookmarkExtension || (BookmarkExtension = {}));
 /// <reference path="./SVG.ts" />
 var BookmarkExtension;
@@ -310,8 +337,9 @@ var BookmarkExtension;
 /// <reference path="./svgs/editSvg.ts" />
 /// <reference path="./svgs/acceptSvg.ts" />
 (function (BookmarkExtension) {
-    class URL {
-        constructor() {
+    class URLWrapper {
+        constructor(URLArray) {
+            this.URLArray = URLArray;
             this.wrapper = document.createElement("div");
             this.btnWrapper = document.createElement("div");
             this.btnWrapper.className = "display-flex justify-c-sb flex-d-row";
@@ -351,11 +379,12 @@ var BookmarkExtension;
                     this.wrapper.appendChild(newUrl);
                     this.wrapper.appendChild(this.editBtn.svg);
                     this.wrapper.appendChild(this.deleteBtn.svg);
+                    BookmarkExtension.Category.pushIntoURLArray(this.URLArray, new BookmarkExtension.URL(this.title.value, this.url.value));
                 }
             });
         }
     }
-    BookmarkExtension.URL = URL;
+    BookmarkExtension.URLWrapper = URLWrapper;
 })(BookmarkExtension || (BookmarkExtension = {}));
 /// <reference path="./Category.ts" />
 /// <reference path="./svgs/addSvg.ts" />
@@ -366,24 +395,25 @@ var BookmarkExtension;
 /// <reference path="./Storage.ts" />
 (function (BookmarkExtension) {
     BookmarkExtension.CategoryList = [];
-    //TODO: Kein Hinzufügen sobald keine URL eingegeben wurde
-    //TODO: Placeholder im category title wird nicht gesynct
+    //TODO: Auslagern der Storage, da chrome.sync begrenzt -> parseStorge() > Storage
     // Storage.replaceBodyInnerHtml();
     function createDevButtons() {
         const getSyncStorage = document.createElement("button");
         const deleteSycnStorage = document.createElement("button");
         const saveBodyInnerHtml = document.createElement("button");
         const replaceBodyInnerHtml = document.createElement("button");
+        const parseStorage = document.createElement("button");
         deleteSycnStorage.innerHTML = "Delete Sync Dev Storage";
         getSyncStorage.innerHTML = "Get Sync Dev Storage";
         saveBodyInnerHtml.innerHTML = "Save Body InnerHTML";
         replaceBodyInnerHtml.innerHTML = "Replace Body InnerHtml";
+        parseStorage.innerHTML = "Parse Storage";
         replaceBodyInnerHtml.addEventListener("click", () => {
             BookmarkExtension.Storage.replaceBodyInnerHtml();
         });
         saveBodyInnerHtml.addEventListener("click", () => {
-            // Storage.saveBodyInnerHtml();
-            BookmarkExtension.Storage.parseStorage();
+            BookmarkExtension.Storage.saveBodyInnerHtml();
+            // Storage.parseStorage();
         });
         deleteSycnStorage.addEventListener("click", () => {
             BookmarkExtension.Storage.deleteSycnStorage();
@@ -391,10 +421,14 @@ var BookmarkExtension;
         getSyncStorage.addEventListener("click", () => {
             BookmarkExtension.Storage.getSyncStorage();
         });
+        parseStorage.addEventListener("click", () => {
+            BookmarkExtension.Storage.parseStorage();
+        });
         document.body.appendChild(deleteSycnStorage);
         document.body.appendChild(getSyncStorage);
-        document.body.appendChild(saveBodyInnerHtml);
         document.body.appendChild(replaceBodyInnerHtml);
+        document.body.appendChild(saveBodyInnerHtml);
+        document.body.appendChild(parseStorage);
     }
     createDevButtons();
     const newAddBtn = document.createElement("button");
@@ -408,5 +442,24 @@ var BookmarkExtension;
         newCategory.addNewCategory();
         console.log(BookmarkExtension.CategoryList);
     });
+})(BookmarkExtension || (BookmarkExtension = {}));
+var BookmarkExtension;
+(function (BookmarkExtension) {
+    class saveFile {
+        constructor() {
+            this.wrapperColor = [];
+            this.titleColor = [];
+            this.URL = [];
+            this.wrapperColor = [];
+            this.titleColor = [];
+            this.URL = [];
+        }
+        createNewSaveFile(wrapperColor, titleColor, URL) {
+            this.wrapperColor.push(wrapperColor);
+            this.titleColor.push(titleColor);
+            this.URL.push(URL);
+        }
+    }
+    BookmarkExtension.saveFile = saveFile;
 })(BookmarkExtension || (BookmarkExtension = {}));
 //# sourceMappingURL=content.js.map
