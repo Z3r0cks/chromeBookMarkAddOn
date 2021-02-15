@@ -2,7 +2,7 @@ namespace BookmarkExtension {
    export class saveFile {
       wrapperColor: string[] = [];
       titleColor: string[] = [];
-      URL: URLWrapper[][] = [];
+      URL: URL[][] = [];
 
       constructor() {
          this.wrapperColor = []
@@ -10,7 +10,7 @@ namespace BookmarkExtension {
          this.URL = []
       }
 
-      createNewSaveFile(wrapperColor: string, titleColor: string, URL: URLWrapper[]) {
+      createNewSaveFile(wrapperColor: string, titleColor: string, URL: URL[]) {
          this.wrapperColor.push(wrapperColor);
          this.titleColor.push(titleColor);
          this.URL.push(URL);

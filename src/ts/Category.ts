@@ -1,7 +1,7 @@
 namespace BookmarkExtension {
    export class Category {
       catWrapper: HTMLDivElement;
-      catWrapperColor: String;
+      catWrapperColor: string;
       titleWrapper: HTMLElement;
       title: HTMLInputElement;
       titleColor: string;

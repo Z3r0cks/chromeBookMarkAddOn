@@ -178,15 +178,21 @@ var BookmarkExtension;
         }
         static parseStorage() {
             console.log("parseStorage");
+            console.log(BookmarkExtension.CategoryList);
             let thisSaveFile = new BookmarkExtension.saveFile;
-            chrome.storage.sync.get(["bodyInnerHTML"], e => {
-                for (const iterator of e.bodyInnerHTML) {
-                    // console.log(iterator.catWrapperColor);
-                    thisSaveFile.createNewSaveFile(iterator.catWrapperColor, iterator.titleColor, iterator.urlArray);
-                }
-                chrome.storage.sync.set({ bodyInnerHTML: thisSaveFile });
-                // console.log(thisSaveFile);
-            });
+            for (const iterator of BookmarkExtension.CategoryList) {
+                thisSaveFile.createNewSaveFile(iterator.catWrapperColor, iterator.titleColor, iterator.urlArray);
+            }
+            return thisSaveFile;
+            // chrome.storage.sync.get(["saveFile"], e => {
+            //    console.log(e.saveFile);
+            //    // for (const iterator of e.saveFile) {
+            //    //    console.log(iterator.catWrapperColor);
+            //    //    thisSaveFile.createNewSaveFile(iterator.catWrapperColor, iterator.titleColor, iterator.urlArray);
+            //    // }
+            //    chrome.storage.sync.set({ saveFile: thisSaveFile })
+            //    // console.log(thisSaveFile);
+            // });
         }
         static setSVGEventlistener(btn) {
             btn.addEventListener('click', () => {
@@ -200,26 +206,35 @@ var BookmarkExtension;
         //       Category.addNewUrl(svg)
         //    })
         // }
-        // new Storage(e.bodyInnerHTML);
-        static replaceBodyInnerHtml() {
+        // new Storage(e.saveFile);
+        static replaceSaveFile() {
             return __awaiter(this, void 0, void 0, function* () {
-                yield callGoogleSyncFunction();
-                Storage.disassembleElements();
-                function callGoogleSyncFunction() {
-                    return new Promise(resolve => {
-                        console.log("replaceBodyInnerHtm");
-                        chrome.storage.sync.get(["bodyInnerHTML"], e => {
-                            document.getElementById("wrapper").innerHTML = e.bodyInnerHTML;
-                            resolve(document.getElementById("wrapper"));
-                        });
-                    });
-                }
+                chrome.storage.sync.get(["saveFile"], e => {
+                    console.log(e.saveFile);
+                    for (const iterator of e.saveFile.wrapperColor) {
+                        console.log(iterator);
+                    }
+                });
+                // await callGoogleSyncFunction();
+                // Storage.disassembleElements()
+                // function callGoogleSyncFunction() {
+                //    return new Promise(resolve => {
+                //       console.log("replaceSaveFile");
+                //       chrome.storage.sync.get(["saveFile"], e => {
+                //          document.getElementById("wrapper").innerHTML = e.saveFile;
+                //          resolve(document.getElementById("wrapper"));
+                //       });
+                //    })
+                // }
             });
         }
-        static saveBodyInnerHtml() {
+        static createSaveFile() {
             console.log("saveBodyInnerHtml");
-            // chrome.storage.sync.set({ bodyInnerHTML: document.getElementById("wrapper").innerHTML });
-            chrome.storage.sync.set({ bodyInnerHTML: BookmarkExtension.CategoryList });
+            // chrome.storage.sync.set({ saveFile: document.getElementById("wrapper").innerHTML });
+            // console.log(CategoryList);
+            const thisSaveFile = Storage.parseStorage();
+            // console.log(thisSaveFile);
+            chrome.storage.sync.set({ saveFile: thisSaveFile });
         }
         static deleteSycnStorage() {
             console.log("deleteSycnStorage");
@@ -232,7 +247,7 @@ var BookmarkExtension;
         }
         static getSyncStorage() {
             console.log("getSyncStorage");
-            chrome.storage.sync.get(["bodyInnerHTML"], e => {
+            chrome.storage.sync.get(["saveFile"], e => {
                 console.log(e);
             });
         }
@@ -394,7 +409,6 @@ var BookmarkExtension;
 /// <reference path="./svgs/addSvg.ts" />
 /// <reference path="./Storage.ts" />
 (function (BookmarkExtension) {
-    BookmarkExtension.CategoryList = [];
     //TODO: Auslagern der Storage, da chrome.sync begrenzt -> parseStorge() > Storage
     // Storage.replaceBodyInnerHtml();
     function createDevButtons() {
@@ -409,10 +423,10 @@ var BookmarkExtension;
         replaceBodyInnerHtml.innerHTML = "Replace Body InnerHtml";
         parseStorage.innerHTML = "Parse Storage";
         replaceBodyInnerHtml.addEventListener("click", () => {
-            BookmarkExtension.Storage.replaceBodyInnerHtml();
+            BookmarkExtension.Storage.replaceSaveFile();
         });
         saveBodyInnerHtml.addEventListener("click", () => {
-            BookmarkExtension.Storage.saveBodyInnerHtml();
+            BookmarkExtension.Storage.createSaveFile();
             // Storage.parseStorage();
         });
         deleteSycnStorage.addEventListener("click", () => {
@@ -431,6 +445,7 @@ var BookmarkExtension;
         document.body.appendChild(parseStorage);
     }
     createDevButtons();
+    BookmarkExtension.CategoryList = [];
     const newAddBtn = document.createElement("button");
     newAddBtn.className = "addNewCategory";
     newAddBtn.innerHTML = "Add Category";

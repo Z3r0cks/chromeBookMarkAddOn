@@ -2,9 +2,6 @@
 /// <reference path="./svgs/addSvg.ts" />
 /// <reference path="./Storage.ts" />
 namespace BookmarkExtension {
-
-   export const CategoryList: Category[] = [];
-
    //TODO: Auslagern der Storage, da chrome.sync begrenzt -> parseStorge() > Storage
 
    // Storage.replaceBodyInnerHtml();
@@ -22,11 +19,11 @@ namespace BookmarkExtension {
       parseStorage.innerHTML = "Parse Storage";
 
       replaceBodyInnerHtml.addEventListener("click", () => {
-         Storage.replaceBodyInnerHtml();
+         Storage.replaceSaveFile();
       })
 
       saveBodyInnerHtml.addEventListener("click", () => {
-         Storage.saveBodyInnerHtml();
+         Storage.createSaveFile();
          // Storage.parseStorage();
       })
 
@@ -50,6 +47,7 @@ namespace BookmarkExtension {
    }
    createDevButtons();
 
+   export const CategoryList: Category[] = [];
    const newAddBtn = document.createElement("button");
    newAddBtn.className = "addNewCategory"
    newAddBtn.innerHTML = "Add Category"
